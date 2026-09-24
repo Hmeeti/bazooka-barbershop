@@ -54,25 +54,27 @@ export function BarbersSection({ barbers }: { barbers: BarberCardData[] }) {
             Портреты мастеров Bazooka. Откройте карточку — там опыт, специализация и запись.
           </p>
 
-          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-14 grid grid-cols-2 gap-4 sm:gap-8 lg:grid-cols-4">
             {barbers.map((b) => (
-              <article key={b.id} className="flex flex-col">
+              <article key={b.id} className="flex h-full flex-col">
                 <div className="relative aspect-[3/4] overflow-hidden bg-white">
                   <Image
                     src={b.photoUrl}
                     alt={b.name}
                     fill
                     className="object-cover object-top"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
                   />
                 </div>
 
-                <div className="mt-5 flex flex-1 flex-col">
-                  <h3 className="display text-3xl tracking-[0.06em] text-ink">{b.name}</h3>
-                  <p className="mt-1 text-xs uppercase tracking-[0.18em] text-gold">
+                <div className="mt-4 flex min-h-0 flex-1 flex-col sm:mt-5">
+                  <h3 className="display text-2xl tracking-[0.06em] text-ink sm:text-3xl">
+                    {b.name}
+                  </h3>
+                  <p className="mt-1 line-clamp-2 min-h-[2.6em] text-[10px] uppercase leading-snug tracking-[0.12em] text-gold sm:min-h-[2.8em] sm:text-xs sm:tracking-[0.16em]">
                     {b.specialization}
                   </p>
-                  <p className="mt-3 text-sm text-muted">
+                  <p className="mt-2 text-xs text-muted sm:text-sm">
                     Опыт {b.experienceYears}{" "}
                     {b.experienceYears === 1
                       ? "год"
@@ -84,7 +86,7 @@ export function BarbersSection({ barbers }: { barbers: BarberCardData[] }) {
                   <button
                     type="button"
                     onClick={() => setOpenId(b.id)}
-                    className="mt-5 w-full border border-border-strong px-4 py-3 text-xs font-medium uppercase tracking-[0.18em] text-ink transition hover:border-gold hover:text-gold"
+                    className="mt-auto w-full border border-border-strong px-2 py-2.5 text-[10px] font-medium uppercase tracking-[0.14em] text-ink hover:border-gold hover:text-gold sm:px-4 sm:py-3 sm:text-xs sm:tracking-[0.18em]"
                   >
                     Подробнее
                   </button>
@@ -181,7 +183,7 @@ export function BarbersSection({ barbers }: { barbers: BarberCardData[] }) {
                 <div className="mt-8 flex flex-wrap gap-3">
                   <Link
                     href={`/booking?barber=${active.id}`}
-                    className="bg-gold px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-bg transition hover:bg-gold-soft"
+                    className="pressable bg-gold px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-bg hover:bg-gold-soft"
                   >
                     Записаться к мастеру
                   </Link>

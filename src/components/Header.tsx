@@ -78,7 +78,7 @@ export function Header() {
           )}
           <Link
             href="/booking"
-            className="border border-gold bg-gold px-4 py-2 text-sm font-semibold uppercase tracking-[0.14em] text-bg transition hover:bg-gold-soft"
+            className="pressable border border-gold bg-gold px-4 py-2 text-sm font-semibold uppercase tracking-[0.14em] text-bg hover:bg-gold-soft"
           >
             Записаться
           </Link>

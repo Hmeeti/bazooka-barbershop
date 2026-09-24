@@ -2,8 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { formatDuration, formatPrice } from "@/lib/utils";
-import { Camera, MapPin, Phone, Clock } from "lucide-react";
+import { MapPin, Phone, Clock } from "lucide-react";
 import { BarbersSection } from "@/components/BarbersSection";
+import { GallerySection } from "@/components/GallerySection";
 
 export const dynamic = "force-dynamic";
 
@@ -47,18 +48,18 @@ export default async function HomePage() {
           <div className="animate-rise mt-8 flex flex-wrap gap-3 [animation-delay:240ms]">
             <Link
               href="/booking"
-              className="border border-gold bg-gold px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.16em] text-bg transition hover:bg-gold-soft"
+              className="pressable border border-gold bg-gold px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.16em] text-bg hover:bg-gold-soft"
             >
               Записаться онлайн
             </Link>
             <a
               href="#services"
-              className="border border-border-strong px-7 py-3.5 text-sm uppercase tracking-[0.16em] text-ink transition hover:border-gold hover:text-gold"
+              className="pressable border border-border-strong px-7 py-3.5 text-sm uppercase tracking-[0.16em] text-ink hover:border-gold hover:text-gold"
             >
               Смотреть услуги
             </a>
-          </div>
-          <div className="animate-pulse-line gold-rule mt-14 max-w-xs" />
+            </div>
+          <div className="h-16 sm:h-20" />
         </div>
       </section>
 
@@ -107,7 +108,7 @@ export default async function HomePage() {
           <div className="mt-10">
             <Link
               href="/booking"
-              className="inline-flex border border-gold px-6 py-3 text-sm uppercase tracking-[0.16em] text-gold transition hover:bg-gold hover:text-bg"
+              className="pressable inline-flex border border-gold px-6 py-3 text-sm uppercase tracking-[0.16em] text-gold hover:bg-gold hover:text-bg"
             >
               Выбрать услугу и записаться
             </Link>
@@ -117,43 +118,7 @@ export default async function HomePage() {
 
       <BarbersSection barbers={barbers} />
 
-      {/* GALLERY */}
-      <section id="gallery" className="border-t border-border bg-bg py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-gold">Portfolio</p>
-              <h2 className="display mt-2 text-5xl text-ink sm:text-6xl">Работы</h2>
-            </div>
-            <a
-              href="https://www.instagram.com/bazooka.barbershop"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.14em] text-muted hover:text-gold"
-            >
-              <Camera size={16} /> Смотреть в Instagram
-            </a>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-3">
-            {portfolio.map((img, i) => (
-              <div
-                key={img.id}
-                className={`relative overflow-hidden bg-surface ${
-                  i === 0 || i === 5 ? "md:col-span-2 md:row-span-2 aspect-square md:aspect-auto md:min-h-[420px]" : "aspect-square"
-                }`}
-              >
-                <Image
-                  src={img.imageUrl}
-                  alt={img.caption || "Работа Bazooka"}
-                  fill
-                  className="object-cover transition duration-700 hover:scale-105"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <GallerySection items={portfolio} />
 
       {/* CONTACTS */}
       <section id="contacts" className="border-t border-border bg-bg-elevated py-20 sm:py-28">

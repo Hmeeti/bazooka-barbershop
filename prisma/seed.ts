@@ -64,7 +64,7 @@ const SERVICES = [
 const BARBERS = [
   {
     name: "Арман",
-    specialization: "Фейды · современные стрижки",
+    specialization: "Фейды · стрижки",
     bio: "Чёткие линии и аккуратный fade.",
     details:
       "Арман в барберинге с 2018 года. Специализируется на современных мужских стрижках: skin fade, mid fade, textured crop. Работает с подростками и взрослыми, всегда начинает с консультации по форме лица и стилю жизни. Клиенты ценят скорость без потери качества и аккуратный финальный контур.",
@@ -133,14 +133,38 @@ const BARBERS = [
 ];
 
 const PORTFOLIO = [
-  "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=900&q=80",
-  "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=900&q=80",
-  "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=900&q=80",
-  "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=900&q=80",
-  "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=900&q=80",
-  "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=900&q=80",
-  "https://images.unsplash.com/photo-1493256338651-d82f8554dab0?w=900&q=80",
-  "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=900&q=80",
+  {
+    url: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=1400&q=80",
+    caption: "Чистый fade и аккуратный контур",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=1400&q=80",
+    caption: "Классическая мужская стрижка",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1400&q=80",
+    caption: "Атмосфера кресла Bazooka",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=1400&q=80",
+    caption: "Моделирование бороды",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=1400&q=80",
+    caption: "Работа мастера за креслом",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=1400&q=80",
+    caption: "Уход и финальный образ",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1493256338651-d82f8554dab0?w=1400&q=80",
+    caption: "Текстура и объём",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1400&q=80",
+    caption: "Детали и точность линий",
+  },
 ];
 
 const BRANCHES = [
@@ -202,8 +226,8 @@ async function main() {
   for (let i = 0; i < PORTFOLIO.length; i++) {
     await prisma.portfolioImage.create({
       data: {
-        imageUrl: PORTFOLIO[i],
-        caption: "Работа мастеров Bazooka",
+        imageUrl: PORTFOLIO[i].url,
+        caption: PORTFOLIO[i].caption,
         sortOrder: i,
         barberId: barbers[i % barbers.length].id,
       },
