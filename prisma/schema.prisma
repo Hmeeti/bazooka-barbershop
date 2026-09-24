@@ -20,18 +20,21 @@ model User {
 }
 
 model Barber {
-  id             String           @id @default(cuid())
-  name           String
-  specialization String
-  bio            String?
-  photoUrl       String
-  isActive       Boolean          @default(true)
-  workStart      Int              @default(10)
-  workEnd        Int              @default(21)
-  createdAt      DateTime         @default(now())
-  appointments   Appointment[]
-  portfolio      PortfolioImage[]
-  services       BarberService[]
+  id               String           @id @default(cuid())
+  name             String
+  specialization   String
+  bio              String?
+  details          String?
+  experienceYears  Int              @default(3)
+  skills           String           @default("[]")
+  photoUrl         String
+  isActive         Boolean          @default(true)
+  workStart        Int              @default(10)
+  workEnd          Int              @default(21)
+  createdAt        DateTime         @default(now())
+  appointments     Appointment[]
+  portfolio        PortfolioImage[]
+  services         BarberService[]
 }
 
 model Service {

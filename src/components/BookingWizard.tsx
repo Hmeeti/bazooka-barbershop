@@ -312,7 +312,11 @@ export function BookingWizard() {
                 )}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={b.photoUrl} alt="" className="h-14 w-14 object-cover" />
+                <img
+                  src={b.photoUrl}
+                  alt=""
+                  className="h-16 w-16 bg-white object-cover object-top"
+                />
                 <div>
                   <div className="font-medium">{b.name}</div>
                   <div className="text-sm text-muted">{b.specialization}</div>

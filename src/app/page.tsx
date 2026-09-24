@@ -3,6 +3,7 @@ import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { formatDuration, formatPrice } from "@/lib/utils";
 import { Camera, MapPin, Phone, Clock } from "lucide-react";
+import { BarbersSection } from "@/components/BarbersSection";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +12,6 @@ export default async function HomePage() {
     prisma.service.findMany({ where: { isActive: true }, orderBy: { sortOrder: "asc" } }),
     prisma.barber.findMany({
       where: { isActive: true },
-      include: { portfolio: { take: 3, orderBy: { sortOrder: "asc" } } },
       orderBy: { name: "asc" },
     }),
     prisma.portfolioImage.findMany({ orderBy: { sortOrder: "asc" }, take: 8 }),
@@ -115,44 +115,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* BARBERS */}
-      <section id="barbers" className="border-t border-border bg-bg-elevated py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <p className="text-xs uppercase tracking-[0.3em] text-gold">Команда</p>
-          <h2 className="display mt-2 text-5xl text-ink sm:text-6xl">Мастера</h2>
-          <p className="mt-3 max-w-lg text-sm text-muted">
-            Выберите конкретного барбера или любого свободного мастера в момент записи.
-          </p>
-
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {barbers.map((b) => (
-              <article key={b.id} className="group">
-                <div className="relative aspect-[3/4] overflow-hidden bg-surface">
-                  <Image
-                    src={b.photoUrl}
-                    alt={b.name}
-                    fill
-                    className="object-cover transition duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-bg via-bg/70 to-transparent p-4 pt-16">
-                    <h3 className="display text-3xl text-ink">{b.name}</h3>
-                    <p className="mt-1 text-xs uppercase tracking-[0.16em] text-gold">
-                      {b.specialization}
-                    </p>
-                  </div>
-                </div>
-                <p className="mt-3 text-sm text-muted line-clamp-3">{b.bio}</p>
-                <Link
-                  href={`/booking?barber=${b.id}`}
-                  className="mt-4 inline-block text-sm uppercase tracking-[0.14em] text-gold hover:text-gold-soft"
-                >
-                  Выбрать мастера →
-                </Link>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <BarbersSection barbers={barbers} />
 
       {/* GALLERY */}
       <section id="gallery" className="border-t border-border bg-bg py-20 sm:py-28">
