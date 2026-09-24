@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bazooka Barbershop — онлайн-запись
 
-## Getting Started
+Стильный веб-сервис для барбершопа **Bazooka** (Тараз): лендинг, каталог услуг, мастера, онлайн-запись, личный кабинет и email-напоминания.
 
-First, run the development server:
+Источник бренда: [instagram.com/bazooka.barbershop](https://www.instagram.com/bazooka.barbershop)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Стек
+
+- **Frontend:** Next.js 16 (App Router) + Tailwind CSS 4 + React 19
+- **Backend:** Next.js Route Handlers
+- **DB:** SQLite + Prisma 5
+- **Auth:** JWT (jose) в httpOnly cookie, регистрация / пароль / OTP
+- **Email:** Nodemailer (SMTP) + console-fallback в dev
+- **Cron:** `node-cron` worker + HTTP endpoint `/api/cron/reminders`
+
+## Архитектура БД
+
+```
+User ──────────< Appointment >──────── Barber
+                     │
+                     └──< AppointmentService >── Service
+
+Barber >── BarberService <── Service
+Barber >── PortfolioImage
+User   >── OtpCode
+Branch (адреса филиалов)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Модель | Назначение |
+|--------|------------|
+| `User` | Клиенты (имя, телефон, email, пароль) |
+| `Service` | Услуги, цена (₸), длительность |
+| `Barber` | Мастера, график `workStart`–`workEnd` |
+| `Appointment` | Записи + флаги `reminder24Sent` / `reminder2hSent` |
+| `Branch` | Филиалы (Желтоксан 76/132, Койгельды 175Б) |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Роутинг
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Путь | Описание |
+|------|----------|
+| `/` | Landing: hero, услуги, мастера, галерея, контакты |
+| `/booking` | 5-шаговый booking flow |
+| `/auth/login` | Email/пароль или OTP |
+| `/auth/register` | Регистрация |
+| `/cabinet` | Предстоящие / история, отмена, перенос |
+| `/api/catalog` | Услуги, мастера, портфолио, филиалы |
+| `/api/slots` | Свободные слоты |
+| `/api/appointments` | CRUD записей + confirmation email |
+| `/api/appointments/[id]/ics` | Apple Calendar файл |
+| `/api/cron/reminders` | Напоминания за 24ч и 2–3ч |
 
-## Learn More
+## Быстрый старт
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm install
+npx prisma migrate dev --name init
+npm run db:seed
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Откройте [http://localhost:3000](http://localhost:3000).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Email в development
 
-## Deploy on Vercel
+Если `SMTP_HOST` пустой — письма печатаются в **консоль сервера** (включая OTP и подтверждения).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Для продакшена заполните `.env` (см. `.env.example`):
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+SMTP_HOST=smtp.resend.com
+SMTP_PORT=587
+SMTP_USER=resend
+SMTP_PASS=re_xxx
+SMTP_FROM="Bazooka Barbershop <noreply@yourdomain.com>"
+```
+
+### Cron-напоминания
+
+Отдельный процесс:
+
+```bash
+npm run cron
+```
+
+Или HTTP (каждые 15 минут из внешнего планировщика):
+
+```bash
+curl -H "x-cron-secret: $CRON_SECRET" http://localhost:3000/api/cron/reminders
+```
+
+## Booking flow
+
+1. Выбор одной или нескольких услуг  
+2. Мастер или «Любой свободный»  
+3. Дата + свободный слот (учёт графика и занятых записей)  
+4. Авторизация (если не вошли)  
+5. Подтверждение → email + кнопки Google / Apple Calendar  
+
+## Дизайн
+
+Тёмный премиальный барбершоп-стиль: `#0B0B0B` / золотой акцент `#C4A574`, шрифты Bebas Neue + DM Sans, mobile-first.
+
+## Данные
+
+Прайс и адреса собраны из публичных источников (2ГИС / карты) и типового меню барбершопа; Instagram API недоступен без токена — портфолио использует тематические фото-плейсхолдеры. После получения Instagram Graph API можно подменить seed.
+
+## Скрипты
+
+| Команда | Действие |
+|---------|----------|
+| `npm run dev` | Dev-сервер |
+| `npm run build` | Production build |
+| `npm run db:seed` | Сиды услуг/мастеров |
+| `npm run cron` | Worker напоминаний |
+| `npm run db:studio` | Prisma Studio |
