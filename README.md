@@ -8,7 +8,7 @@
 
 - **Frontend:** Next.js 16 (App Router) + Tailwind CSS 4 + React 19
 - **Backend:** Next.js Route Handlers
-- **DB:** SQLite + Prisma 5
+- **DB:** PostgreSQL (Neon) + Prisma 5
 - **Auth:** JWT (jose) в httpOnly cookie, регистрация / пароль / OTP
 - **Email:** Nodemailer (SMTP) + console-fallback в dev
 - **Cron:** `node-cron` worker + HTTP endpoint `/api/cron/reminders`
@@ -51,14 +51,23 @@ Branch (адреса филиалов)
 
 ## Быстрый старт
 
+Нужна база PostgreSQL (например, бесплатная [Neon](https://neon.tech)). Укажите её строку подключения в `DATABASE_URL` в `.env`.
+
 ```bash
 npm install
-npx prisma migrate dev --name init
+npm run db:push
 npm run db:seed
 npm run dev
 ```
 
 Откройте [http://localhost:3000](http://localhost:3000).
+
+### Деплой на Vercel
+
+1. Импортируйте репозиторий в Vercel.
+2. Storage → Neon Postgres → подключите к проекту (`DATABASE_URL` добавится сам).
+3. Добавьте переменные `JWT_SECRET`, `CRON_SECRET`, `APP_URL`.
+4. Deploy. При сборке таблицы создаются автоматически, а услуги и мастера заполняются, если база пустая.
 
 ### Email в development
 

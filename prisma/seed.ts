@@ -195,6 +195,11 @@ const BRANCHES = [
 ];
 
 async function main() {
+  if (process.argv.includes("--if-empty") && (await prisma.service.count()) > 0) {
+    console.log("Seed skipped: database already has data");
+    return;
+  }
+
   await prisma.appointmentService.deleteMany();
   await prisma.appointment.deleteMany();
   await prisma.otpCode.deleteMany();

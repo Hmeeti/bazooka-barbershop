@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { processReminders } from "@/lib/reminders";
 
 export async function GET(req: NextRequest) {
-  const secret = req.headers.get("x-cron-secret") || req.nextUrl.searchParams.get("secret");
+  const bearer = req.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
+  const secret =
+    bearer || req.headers.get("x-cron-secret") || req.nextUrl.searchParams.get("secret");
   if (secret !== process.env.CRON_SECRET) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
