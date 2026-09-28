@@ -62,12 +62,16 @@ npm run dev
 
 Откройте [http://localhost:3000](http://localhost:3000).
 
-### Деплой на Vercel
+### Деплой на Render
 
-1. Импортируйте репозиторий в Vercel.
-2. Storage → Neon Postgres → подключите к проекту (`DATABASE_URL` добавится сам).
-3. Добавьте переменные `JWT_SECRET`, `CRON_SECRET`, `APP_URL`.
-4. Deploy. При сборке таблицы создаются автоматически, а услуги и мастера заполняются, если база пустая.
+В репозитории есть `render.yaml` (Blueprint): веб-сервис + база PostgreSQL.
+
+1. Render → **New → Blueprint** → выберите этот репозиторий.
+2. Нажмите **Apply**. `DATABASE_URL`, `JWT_SECRET` и `CRON_SECRET` заполнятся автоматически.
+3. При запуске сервис создаёт таблицы и заполняет услуги и мастеров, если база пустая.
+4. Каждый push в `master` деплоится автоматически.
+
+Если адрес сервиса отличается от `bazooka-barbershop.onrender.com`, поменяйте `APP_URL` в настройках сервиса.
 
 ### Email в development
 
